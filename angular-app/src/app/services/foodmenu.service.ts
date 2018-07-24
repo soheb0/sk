@@ -13,18 +13,13 @@ export class FoodmenuService {
   constructor(private http: HttpClient) {}
 
   public getMenuForDay(day: string) {
-    let menuListe = [];
-    if(!day) return "Error: Day nicht erkannt!";
-    for(let tag in liste.cw24){
-      if(day.toLowerCase() === tag){
-        for(let id in liste.cw24[tag]){
-          for(let currentFood in liste.meals){
-            if((liste.cw24[tag])[id] === currentFood){
-              menuListe.push(liste.meals[currentFood]);
-            }
-          }
-        }
-      }
+    let menuListe = "";
+    for(let el in liste["cw24"][day]) {
+      try {
+        let foodId = liste["cw24"][day][el];
+        menuListe+= el + ": " + liste["meals"][foodId]["title"];
+        menuListe+= " " + liste["meals"][foodId]["price"] + "<br>";
+      } catch(e) {}
     }
     return menuListe;
   }

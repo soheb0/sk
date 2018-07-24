@@ -20,24 +20,17 @@ export class MessageFormComponent {
     const newMesssage = new Message(this.message.content, '/assets/images/user.png', new Date());
     this.messages.push(newMesssage);
     this.message.content = '';
+    let respMessage;
     this.dialog.getResponse(newMesssage.content).subscribe((resp) => {
       //console.log(resp);
-      const speech = resp.result.fulfillment.speech;
+      let speech = resp.result.fulfillment.speech;
       if(resp.result.parameters.day){
-        const tag = resp.result.parameters.day;
-        const liste = this.menu.getMenuForDay(tag);
-        let counter = 1;
-        for(let items in liste) {
-          if(liste[items]){
-            let text = (counter++) +": "+ liste[items].title + ". Für nur: " + liste[items].price
-            const respMessage = new Message(text, '/assets/images/user.png', new Date());
-            this.messages.push(respMessage);
-          }
-        }
+        let tag = (resp.result.parameters.day).toLowerCase();
+        respMessage = new Message(this.menu.getMenuForDay(tag), '/assets/images/user.png', new Date());
       } else {
-        const respMessage = new Message(speech, '/assets/images/user.png', new Date());
-        this.messages.push(respMessage);
+        respMessage = new Message(speech, '/assets/images/user.png', new Date());
       }
+      this.messages.push(respMessage);
     });
 
   }
