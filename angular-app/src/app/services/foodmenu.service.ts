@@ -12,13 +12,20 @@ export class FoodmenuService {
 
   constructor(private http: HttpClient) {}
 
-  public getMenuForDay(day: string) {
+  public getMenuForDay(day: string, pick : string) {
+    if(!day && pick) return "test";
     let menuListe = "";
     for(let el in liste["cw24"][day]) {
       try {
+        if(pick && pick === el) {
+          let foodId = liste["cw24"][day][el];
+          menuListe+= "• " + el + ": " + liste["meals"][foodId]["title"];
+          menuListe+= " (" + liste["meals"][foodId]["price"] + ")" + "<br>";
+          return menuListe;
+        }
         let foodId = liste["cw24"][day][el];
-        menuListe+= el + ": " + liste["meals"][foodId]["title"];
-        menuListe+= " " + liste["meals"][foodId]["price"] + "<br>";
+        menuListe+= "• " + el + ": " + liste["meals"][foodId]["title"];
+        menuListe+= " (" + liste["meals"][foodId]["price"] + ")" + "<br>";
       } catch(e) {}
     }
     return menuListe;
